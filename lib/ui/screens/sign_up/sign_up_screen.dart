@@ -29,9 +29,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   AppUser? user;
   late final formKey = GlobalKey<FormState>();
 
-  Username userName = Username.pure();
-  Email email = Email.pure();
-  Password password = Password.pure();
+  InputUsername userName = InputUsername.pure();
+  InputEmail email = InputEmail.pure();
+  InputPassword password = InputPassword.pure();
 
   Future<void> signUp() async {
     if (!formKey.currentState!.validate()) {
@@ -111,7 +111,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         prefixIcon: Icon(Icons.person_outline_rounded),
                       ),
                       onChanged: (value) =>
-                          setState(() => userName = Username.dirty(value)),
+                          setState(() => userName = InputUsername.dirty(value)),
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
@@ -123,7 +123,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
                       onChanged: (value) =>
-                          setState(() => email = Email.dirty(value)),
+                          setState(() => email = InputEmail.dirty(value)),
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
@@ -140,7 +140,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                   ? const Icon(Icons.check_box)
                                   : const Icon(Icons.error_outline)),
                       onChanged: (value) =>
-                          setState(() => password = Password.dirty(value)),
+                          setState(() => password = InputPassword.dirty(value)),
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
