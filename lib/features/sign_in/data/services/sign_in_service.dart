@@ -4,6 +4,7 @@ import '../../../../core/result.dart';
 import '../../../../core/typedefs.dart';
 import '../../../../failures/auth_failure.dart';
 import '../../domain/repositories/sign_in_repository.dart';
+import '../../../../ui/shared/extensions/form_field_x.dart';
 
 class SignInService implements SignInRepository {
   const SignInService(this.client);
@@ -12,13 +13,13 @@ class SignInService implements SignInRepository {
 
   @override
   FutureAuthResult<void, SignInAuthFailure> signIn({
-    required String email,
-    required String password,
+    required Email email,
+    required Password password,
   }) async {
     try {
       final credentials = await client.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+        email: email.value,
+        password: password.value,
       );
       final user = credentials.user;
       if (user != null) {
