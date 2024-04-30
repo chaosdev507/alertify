@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers.dart';
 import '../../../../core/result.dart';
+import '../../../../ui/shared/extensions/form_field_x.dart';
 
 enum SignInStatus { none, success }
 
@@ -11,7 +12,7 @@ class SignInController extends AutoDisposeAsyncNotifier<SignInStatus> {
   @override
   FutureOr<SignInStatus> build() => SignInStatus.none;
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<void> signIn({required Email email, required Password password}) async {
     state = const AsyncLoading();
 
     try {
