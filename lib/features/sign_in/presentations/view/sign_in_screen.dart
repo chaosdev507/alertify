@@ -13,6 +13,7 @@ import '../../../../ui/shared/extensions/build_context.dart';
 import '../../../../ui/shared/validators/form_validator.dart';
 import '../../../../ui/shared/widgets/flutter_masters_rich_text.dart';
 import '../controller/sign_in_controller.dart';
+import '../../../../ui/shared/extensions/form_field_x.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -34,7 +35,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     if (!formKey.currentState!.validate()) return;
     ref
         .read(signInControllerProvider.notifier)
-        .signIn(email: email, password: password);
+        .signIn(email: Email(email), password: Password(password));
   }
 
   void _showLoader() {
