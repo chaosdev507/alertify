@@ -1,7 +1,7 @@
-extension type Email._(String _email) {
-  Email.pure() : this._('');
+extension type InputEmail._(String _email) {
+  InputEmail.pure() : this._('');
 
-  Email.dirty(String value) : this._(value);
+  InputEmail.dirty(String value) : this._(value);
 
   String? validate(String? value) {
     if (value == null || value.isEmpty) {
@@ -21,10 +21,10 @@ extension type Email._(String _email) {
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_email);
 }
 
-extension type Password._(String _password) {
-  Password.pure() : this._('');
+extension type InputPassword._(String _password) {
+  InputPassword.pure() : this._('');
 
-  Password.dirty(String value) : this._(value);
+  InputPassword.dirty(String value) : this._(value);
 
   String? validate(String? value) {
     if (value == null || value.isEmpty) {
@@ -56,10 +56,10 @@ extension type Password._(String _password) {
   bool isValid() => _password.length > 3;
 }
 
-extension type Username._(String _username) {
-  Username.pure() : this._('');
+extension type InputUsername._(String _username) {
+  InputUsername.pure() : this._('');
 
-  Username.dirty(String value) : this._(value);
+  InputUsername.dirty(String value) : this._(value);
 
   String? validate(String? value) {
     if (value == null || value.isEmpty) {
@@ -76,4 +76,33 @@ extension type Username._(String _username) {
   bool isEmpty() => _username.isEmpty;
 
   bool isValid() => _username.length > 3;
+}
+
+extension type Email._(String _email) {
+  factory Email(String? value) {
+    if (value == null || value.isEmpty) {
+      throw ArgumentError('Email is required.');
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      throw ArgumentError('Email is not valid.');
+    }
+    return Email._(value);
+  }
+
+  get value => _email;
+}
+
+extension type Password._(String _password) {
+  factory Password(String? value) {
+    if (value == null || value.isEmpty) {
+      throw ArgumentError('Password is required.');
+    }
+
+    if (value.length < 4) {
+      throw ArgumentError('Password is too short.');
+    }
+    return Password._(value);
+  }
+
+  get value => _password;
 }
