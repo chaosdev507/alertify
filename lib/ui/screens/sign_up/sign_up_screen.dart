@@ -11,9 +11,9 @@ import '../../shared/dialogs/error_dialog.dart';
 import '../../shared/dialogs/loader_dialog.dart';
 import '../../shared/extensions/auth_failure_x.dart';
 import '../../shared/extensions/build_context.dart';
-import '../../shared/validators/form_validator.dart';
 import '../../shared/widgets/flutter_masters_rich_text.dart';
 import '../home/home_screen.dart';
+import '../../shared/extensions/form_field_x.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -29,9 +29,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   AppUser? user;
   late final formKey = GlobalKey<FormState>();
 
-  var userName = '';
-  var email = '';
-  var password = '';
+  Username userName = Username.pure();
+  Email email = Email.pure();
+  Password password = Password.pure();
 
   Future<void> signUp() async {
     if (!formKey.currentState!.validate()) {
@@ -41,7 +41,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final authRepo = ref.read(authRepoProvider);
     final result = await showLoader(
       context,
-      authRepo.signUp(email: email, password: password),
+      authRepo.signUp(email: email.value, password: password.value),
     );
     final record = switch (result) {
       Success(value: final user) => (user: user, failure: null),
@@ -65,8 +65,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       context,
       userService.createUser(
         id: user!.id,
-        username: userName,
-        email: email,
+        username: userName.value,
+        email: email.value,
         photoUrl: user?.photoUrl,
       ),
     );
@@ -103,43 +103,48 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
-                      validator: FormValidator.userName,
+                      validator: userName.validate,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.name,
                       decoration: const InputDecoration(
                         hintText: 'Your username here',
                         prefixIcon: Icon(Icons.person_outline_rounded),
                       ),
-                      onChanged: (value) => setState(() => userName = value),
+                      onChanged: (value) =>
+                          setState(() => userName = Username.dirty(value)),
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
-                      validator: FormValidator.email,
+                      validator: email.validate,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: 'Your email here',
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
-                      onChanged: (value) => setState(() => email = value),
+                      onChanged: (value) =>
+                          setState(() => email = Email.dirty(value)),
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
-                      validator: FormValidator.password,
+                      validator: password.validate,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.visiblePassword,
-                      decoration: const InputDecoration(
-                        hintText: 'Your password here',
-                        prefixIcon: Icon(Icons.lock_outline_rounded),
-                      ),
-                      onChanged: (value) => setState(() => password = value),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          hintText: 'Your password here',
+                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          suffixIcon: password.isEmpty()
+                              ? const Icon(Icons.check_box_outline_blank)
+                              : password.isValid()
+                                  ? const Icon(Icons.check_box)
+                                  : const Icon(Icons.error_outline)),
+                      onChanged: (value) =>
+                          setState(() => password = Password.dirty(value)),
                     ),
                     const SizedBox(height: 28),
                     TextFormField(
-                      validator: (value) => FormValidator.confirmPassword(
-                        value,
-                        password,
-                      ),
+                      validator: password.match,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.visiblePassword,
                       decoration: const InputDecoration(
