@@ -1,4 +1,5 @@
 import '../../../core/result.dart';
+import '../../../failures/auth_failure.dart';
 
 extension type InputEmail._(String _email) {
   InputEmail.pure() : this._('');
@@ -80,13 +81,13 @@ extension type InputUsername._(String _username) {
   bool isValid() => _username.length > 3;
 }
 
-extension type Email._(Result<String, String> _email) {
+extension type Email._(Result<String, SignInAuthFailure> _email) {
   factory Email(String? value) {
     if (value == null || value.isEmpty) {
-      return Email._(Err('Email is required.'));
+      return Email._(Err(SignInAuthFailure.invalidEmail));
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return Email._(Err('Email is not valid.'));
+      return Email._(Err(SignInAuthFailure.invalidEmail));
     }
     return Email._(Success(value));
   }
@@ -94,14 +95,14 @@ extension type Email._(Result<String, String> _email) {
   get result => _email;
 }
 
-extension type Password._(Result<String, String> _password) {
+extension type Password._(Result<String, SignInAuthFailure> _password) {
   factory Password(String? value) {
     if (value == null || value.isEmpty) {
-      return Password._(Err('Password is required.'));
+      return Password._(Err(SignInAuthFailure.invalidCredential));
     }
 
     if (value.length < 4) {
-      return Password._(Err('Password is too short.'));
+      return Password._(Err(SignInAuthFailure.invalidCredential));
     }
     return Password._(Success(value));
   }
