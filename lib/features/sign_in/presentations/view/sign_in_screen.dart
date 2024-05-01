@@ -33,7 +33,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   Future<void> _signIn() async {
     if (!formKey.currentState!.validate()) return;
-
     ref
         .read(signInControllerProvider.notifier)
         .signIn(email: Email(email), password: Password(password));
