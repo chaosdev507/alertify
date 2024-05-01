@@ -24,6 +24,10 @@ extension SignInAuthFailureX on SignInAuthFailure {
             icon: Icons.mark_email_unread_outlined,
             message: 'Invalid credentials'
           ),
+        SignInAuthFailure.invalidEmail => (
+            icon: Icons.mark_email_unread_outlined,
+            message: 'Invalid email address',
+          ),
         _ => (
             icon: Icons.error_outline,
             message: 'Something went wrong.',
