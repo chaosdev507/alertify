@@ -18,8 +18,8 @@ class SignInService implements SignInRepository {
   }) async {
     try {
       final credentials = await client.signInWithEmailAndPassword(
-        email: email.value,
-        password: password.value,
+        email: email.result.value,
+        password: password.result.value,
       );
       final user = credentials.user;
       if (user != null) {

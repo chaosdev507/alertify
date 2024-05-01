@@ -16,6 +16,16 @@ class SignInController extends AutoDisposeAsyncNotifier<SignInStatus> {
     state = const AsyncLoading();
 
     try {
+      if(email is Err) {
+        state = AsyncError(email.result.value, StackTrace.current);
+        return;
+      }
+
+      if(password is Err) {
+        state = AsyncError(password.result.value, StackTrace.current);
+        return;
+      }
+
       final authRepo = ref.read(signInServiceProvider);
 
       final result = await authRepo.signIn(email: email, password: password);
