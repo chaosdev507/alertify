@@ -1,3 +1,5 @@
+import '../../../core/result.dart';
+
 extension type InputEmail._(String _email) {
   InputEmail.pure() : this._('');
 
@@ -78,31 +80,31 @@ extension type InputUsername._(String _username) {
   bool isValid() => _username.length > 3;
 }
 
-extension type Email._(String _email) {
+extension type Email._(Result<String, String> _email) {
   factory Email(String? value) {
     if (value == null || value.isEmpty) {
-      throw ArgumentError('Email is required.');
+      return Email._(Err('Email is required.'));
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      throw ArgumentError('Email is not valid.');
+      return Email._(Err('Email is not valid.'));
     }
-    return Email._(value);
+    return Email._(Success(value));
   }
 
-  get value => _email;
+  get result => _email;
 }
 
-extension type Password._(String _password) {
+extension type Password._(Result<String, String> _password) {
   factory Password(String? value) {
     if (value == null || value.isEmpty) {
-      throw ArgumentError('Password is required.');
+      return Password._(Err('Password is required.'));
     }
 
     if (value.length < 4) {
-      throw ArgumentError('Password is too short.');
+      return Password._(Err('Password is too short.'));
     }
-    return Password._(value);
+    return Password._(Success(value));
   }
 
-  get value => _password;
+  get result => _password;
 }
