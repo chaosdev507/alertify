@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/result.dart';
 import '../../../../failures/auth_failure.dart';
 import '../../../../ui/screens/home/home_screen.dart';
 import '../../../../ui/screens/sign_up/sign_up_screen.dart';
@@ -34,15 +33,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   Future<void> _signIn() async {
     if (!formKey.currentState!.validate()) return;
-    
-    final resultEmail = Email(email);
-    final resultPassword = Password(password);
-
-    if (resultEmail is Err || resultPassword is Err) return;
-
     ref
         .read(signInControllerProvider.notifier)
-        .signIn(email: resultEmail, password: resultPassword);
+        .signIn(email: Email(email), password: Password('abc'));
   }
 
   void _showLoader() {
